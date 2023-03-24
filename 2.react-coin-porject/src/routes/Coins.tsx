@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
+//git test
+
 const coins = [
   {
     id: "btc-bitcoin",
