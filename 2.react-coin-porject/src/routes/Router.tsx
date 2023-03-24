@@ -4,7 +4,7 @@ import Coins from "./Coins";
 import Coin from "./Coin";
 
 
-const Router = createBrowserRouter([
+const router = createBrowserRouter([
     {
         path: "/",
         element: <App/>,
@@ -21,4 +21,4 @@ const Router = createBrowserRouter([
     }
 ])
 
-export default Router;
+export default router;

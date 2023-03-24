@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import Router from './routes//Router';
+import router from './routes/router';
 import { theme } from './styles/theme'
 
 const root = ReactDOM.createRoot(
@@ -11,7 +11,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={ theme }>
-      <RouterProvider router={Router}/>
+      <RouterProvider router={router}/>
     </ThemeProvider>
   </React.StrictMode>
 );

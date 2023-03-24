@@ -1,9 +1,14 @@
-import React from 'react';
+
 import { Outlet } from 'react-router-dom';
+import { GlogalStyle } from './styles/Reset'
+
 
 function App() {
   return (
-    <Outlet/>
+    <>
+      <GlogalStyle />
+      <Outlet/>
+    </>
   );
 }
 
