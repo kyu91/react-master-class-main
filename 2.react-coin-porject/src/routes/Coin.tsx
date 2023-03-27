@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { useParams, useLocation, Outlet, Link, useMatch } from 'react-router-dom';
 import styled from "styled-components";
-import { useEffect } from 'react';
+import { useQuery } from 'react-query';
+import { fetchCoinsInfo, fetchCoinsTickers } from '../api';
+import { Helmet } from 'react-helmet';
 
 
 
@@ -130,15 +132,14 @@ const Tab = styled.span<{ isActive: boolean }>`
 
 const Coin = () => {
     const {coinId} = useParams();
-    const [loading, setLoading] = useState(true);
     const { state } = useLocation();
-    const [info, setInfo] = useState<InfoData>();
-    const [price, setPrice] = useState<PriceData>();
-
     //useRouteMatch hook: 유저가 있는 페이지가 url과 매칭이 된다면 리턴을 줌
     const priceMatch = useMatch("/:coinId/price");
     const chartMatch = useMatch("/:coinId/chart");
 
+    /* const [loading, setLoading] = useState(true);
+    const [info, setInfo] = useState<InfoData>();
+    const [price, setPrice] = useState<PriceData>();
 
     useEffect(() => {
       (async() => {
@@ -152,40 +153,54 @@ const Coin = () => {
         setPrice(priceData);
         setLoading(false);
       }) ();
-    }, [coinId]);
+    }, [coinId]); */
+
+    const {isLoading: infoLoding, data: infoData} = useQuery(["info", coinId], () => fetchCoinsInfo(coinId!));
+    const {isLoading: tickersLoding, data: tickerData} = useQuery(
+      ["tickers", coinId], 
+      () => fetchCoinsTickers(coinId!),
+      {
+        refetchInterval: 5000,
+      } 
+    );
+
+    const isLoading = infoLoding || tickersLoding;
 
   return (
     <Container>
+      <Helmet>
+        <title>{state?.name ? state.name : isLoading ? "Loading..." : infoData?.name}</title>
+      </Helmet>
       <Header>
         <Title>
-        {state?.name ? state.name : loading ? "Loading..." : info?.name}
+        {state?.name ? state.name : isLoading ? "Loading..." : infoData?.name}
         </Title>
       </Header>
-      {loading ? <Loader>로딩즁...</Loader> : 
+      {isLoading ? <Loader>로딩즁...</Loader> : 
         <>
                 <Overview>
             <OverviewItem>
               <span>Rank:</span>
-              <span>{info?.rank}</span>
+              <span>{infoData?.rank}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Symbol:</span>
-              <span>${info?.symbol}</span>
+              <span>{infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>Open Source:</span>
-              <span>{info?.open_source ? "Yes" : "No"}</span>
+              <span>Price:</span>
+              <span>{tickerData?.quotes.USD.price}</span>
             </OverviewItem>
           </Overview>
-          <Description>{info?.description}</Description>
+          <Description>{infoData?.description}</Description>
           <Overview>
             <OverviewItem>
               <span>Total Suply:</span>
-              <span>{price?.total_supply}</span>
+              <span>{tickerData?.total_supply}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Max Supply:</span>
-              <span>{price?.max_supply}</span>
+              <span>{tickerData?.max_supply}</span>
             </OverviewItem>
           </Overview>
 
@@ -200,7 +215,7 @@ const Coin = () => {
           </Tabs>
 
           {/* 탭메뉴 컨탠츠 */}
-          <Outlet/>         
+          <Outlet context={{ coinId : coinId }}/>         
         </>
       }
     </Container>

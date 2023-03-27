@@ -1,8 +1,10 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useQuery } from "react-query";
+import { fetchCoins } from '../api';
+import { Helmet } from "react-helmet";
 
-interface CoinInterface {
+interface ICoin {
   id: string,
   name: string,
   symbol: string,
@@ -61,7 +63,7 @@ const CoinImg = styled.img`
 `
 
 const Coins = () => {
-  const [coins, setCoins] = useState<CoinInterface[]>([]);
+  /* const [coins, setCoins] = useState<CoinInterface[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -71,18 +73,24 @@ const Coins = () => {
       setCoins(json.slice(0, 99));
       setLoading(false);
     }) ();
-  }, [])
+  }, []) */
   
+  //react-query로 수정
+  const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins)
+
   return (
     <Container>
+      <Helmet>
+        <title>코인</title>
+      </Helmet>
       <Header>
         <Title>
           코인
         </Title>
       </Header>
-      {loading ? <Loader>로딩즁...</Loader> : 
+      {isLoading ? <Loader>로딩즁...</Loader> : 
         <CoinsList>
-        {coins.map((coin) => (
+        {data?.slice(0,100).map((coin) => (
           <Coin key={coin.id}>
             <Link 
               to = {`${coin.id}`} 
