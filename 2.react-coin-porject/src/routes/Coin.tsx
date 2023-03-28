@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useQuery } from 'react-query';
 import { fetchCoinsInfo, fetchCoinsTickers } from '../api';
 import { Helmet } from 'react-helmet';
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 
 
@@ -72,14 +73,16 @@ const Container = styled.div`
 
 const Header = styled.header`
   height: 10vh;
-  display: flex;
+  /* display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
 `;
 
 const Title = styled.h1`
-font-size: 48px;
+  font-size: 48px;
   color : ${(props) => props.theme.accentColor};
+  text-align: center;
+  
 `;
 
 const Loader = styled.p`
@@ -130,6 +133,15 @@ const Tab = styled.span<{ isActive: boolean }>`
   }
 `;
 
+const BackButton = styled.div `
+  display: flex; 
+  width: 30px;
+  a {
+    font-size: 30px;
+  }
+  
+`
+
 const Coin = () => {
     const {coinId} = useParams();
     const { state } = useLocation();
@@ -172,8 +184,13 @@ const Coin = () => {
         <title>{state?.name ? state.name : isLoading ? "Loading..." : infoData?.name}</title>
       </Helmet>
       <Header>
+        <BackButton>
+          <Link to = "/">
+            <IoMdArrowRoundBack/>
+          </Link>
+        </BackButton>
         <Title>
-        {state?.name ? state.name : isLoading ? "Loading..." : infoData?.name}
+          {state?.name ? state.name : isLoading ? "Loading..." : infoData?.name}
         </Title>
       </Header>
       {isLoading ? <Loader>로딩즁...</Loader> : 

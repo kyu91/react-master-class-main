@@ -37,7 +37,7 @@ const Chart = () => {
                 type='line'
                 series={[
                     {
-                        name : "Price",
+                        name : "Chart",
                         data : data?.map((price) => parseInt(price.close)) ?? [],
                     },
                 ]}
