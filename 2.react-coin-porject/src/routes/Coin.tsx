@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import { useParams, useLocation, Outlet, Link, useMatch } from 'react-router-dom';
 import styled from "styled-components";
 import { useQuery } from 'react-query';
@@ -8,62 +7,62 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 
 
 
-//interface
-interface InfoData {
-  id : string;
-  name : string;
-  symbol : string;
-  rank : number;
-  is_new : boolean;
-  is_active : boolean;
-  type : string;
-  logo : string;
-  description : string;
-  message : string;
-  open_source : boolean;
-  started_at : string;
-  development_status : string;
-  hardware_wallet : boolean;
-  proof_type : string;
-  org_structure : string;
-  hash_algorithm : string;
-  whitepaper : object;
-  first_data_at : string;
-  last_data_at : string;
-}
+// //interface
+// interface InfoData {
+//   id : string;
+//   name : string;
+//   symbol : string;
+//   rank : number;
+//   is_new : boolean;
+//   is_active : boolean;
+//   type : string;
+//   logo : string;
+//   description : string;
+//   message : string;
+//   open_source : boolean;
+//   started_at : string;
+//   development_status : string;
+//   hardware_wallet : boolean;
+//   proof_type : string;
+//   org_structure : string;
+//   hash_algorithm : string;
+//   whitepaper : object;
+//   first_data_at : string;
+//   last_data_at : string;
+// }
 
-interface PriceData {
-  id: string;
-  name: string;
-  symbol: string;
-  rank: number;
-  circulating_supply: number;
-  total_supply: number;
-  max_supply: number;
-  beta_value: number;
-  first_data_at: string;
-  last_updated: string;
-  quotes: {
-    USD: {
-      ath_date:string;
-      ath_price:number;
-      market_cap:number;
-      market_cap_change_24h:number;
-      percent_change_1h:number;
-      percent_change_1y:number;
-      percent_change_7d:number;
-      percent_change_12h:number;
-      percent_change_15m:number;
-      percent_change_24h:number;
-      percent_change_30d:number;
-      percent_change_30m:number;
-      percent_from_price_ath:number;
-      price:number;
-      volume_24h:number;
-      volume_24h_change_24h:number;
-    }
-  };
-}
+// interface PriceData {
+//   id: string;
+//   name: string;
+//   symbol: string;
+//   rank: number;
+//   circulating_supply: number;
+//   total_supply: number;
+//   max_supply: number;
+//   beta_value: number;
+//   first_data_at: string;
+//   last_updated: string;
+//   quotes: {
+//     USD: {
+//       ath_date:string;
+//       ath_price:number;
+//       market_cap:number;
+//       market_cap_change_24h:number;
+//       percent_change_1h:number;
+//       percent_change_1y:number;
+//       percent_change_7d:number;
+//       percent_change_12h:number;
+//       percent_change_15m:number;
+//       percent_change_24h:number;
+//       percent_change_30d:number;
+//       percent_change_30m:number;
+//       percent_from_price_ath:number;
+//       price:number;
+//       volume_24h:number;
+//       volume_24h_change_24h:number;
+//     }
+//   };
+// }
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -133,7 +132,7 @@ const Tab = styled.span<{ isActive: boolean }>`
   }
 `;
 
-const BackButton = styled.div `
+const BackButton = styled.div`
   display: flex; 
   width: 30px;
   a {
@@ -143,40 +142,40 @@ const BackButton = styled.div `
 `
 
 const Coin = () => {
-    const {coinId} = useParams();
-    const { state } = useLocation();
-    //useRouteMatch hook: 유저가 있는 페이지가 url과 매칭이 된다면 리턴을 줌
-    const priceMatch = useMatch("/:coinId/price");
-    const chartMatch = useMatch("/:coinId/chart");
+  const { coinId } = useParams();
+  const { state } = useLocation();
+  //useRouteMatch hook: 유저가 있는 페이지가 url과 매칭이 된다면 리턴을 줌
+  const priceMatch = useMatch("/:coinId/price");
+  const chartMatch = useMatch("/:coinId/chart");
 
-    /* const [loading, setLoading] = useState(true);
-    const [info, setInfo] = useState<InfoData>();
-    const [price, setPrice] = useState<PriceData>();
+  /* const [loading, setLoading] = useState(true);
+  const [info, setInfo] = useState<InfoData>();
+  const [price, setPrice] = useState<PriceData>();
 
-    useEffect(() => {
-      (async() => {
-        const infoData = await (
-          await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
-        ).json();
-        const priceData = await (
-          await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
-        ).json();
-        setInfo(infoData);
-        setPrice(priceData);
-        setLoading(false);
-      }) ();
-    }, [coinId]); */
+  useEffect(() => {
+    (async() => {
+      const infoData = await (
+        await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
+      ).json();
+      const priceData = await (
+        await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
+      ).json();
+      setInfo(infoData);
+      setPrice(priceData);
+      setLoading(false);
+    }) ();
+  }, [coinId]); */
 
-    const {isLoading: infoLoding, data: infoData} = useQuery(["info", coinId], () => fetchCoinsInfo(coinId!));
-    const {isLoading: tickersLoding, data: tickerData} = useQuery(
-      ["tickers", coinId], 
-      () => fetchCoinsTickers(coinId!),
-      {
-        refetchInterval: 5000,
-      } 
-    );
+  const { isLoading: infoLoding, data: infoData } = useQuery(["info", coinId], () => fetchCoinsInfo(coinId!));
+  const { isLoading: tickersLoding, data: tickerData } = useQuery(
+    ["tickers", coinId],
+    () => fetchCoinsTickers(coinId!),
+    {
+      refetchInterval: 5000,
+    }
+  );
 
-    const isLoading = infoLoding || tickersLoding;
+  const isLoading = infoLoding || tickersLoding;
 
   return (
     <Container>
@@ -185,17 +184,17 @@ const Coin = () => {
       </Helmet>
       <Header>
         <BackButton>
-          <Link to = "/">
-            <IoMdArrowRoundBack/>
+          <Link to="/">
+            <IoMdArrowRoundBack />
           </Link>
         </BackButton>
         <Title>
           {state?.name ? state.name : isLoading ? "Loading..." : infoData?.name}
         </Title>
       </Header>
-      {isLoading ? <Loader>로딩즁...</Loader> : 
+      {isLoading ? <Loader>로딩즁...</Loader> :
         <>
-                <Overview>
+          <Overview>
             <OverviewItem>
               <span>Rank:</span>
               <span>{infoData?.rank}</span>
@@ -232,7 +231,7 @@ const Coin = () => {
           </Tabs>
 
           {/* 탭메뉴 컨탠츠 */}
-          <Outlet context={{ coinId : coinId }}/>         
+          <Outlet context={{ coinId: coinId }} />
         </>
       }
     </Container>

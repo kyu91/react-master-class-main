@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useQuery } from "react-query";
 import { fetchCoins } from '../api';
 import { Helmet } from "react-helmet";
+import { useSetRecoilState } from "recoil";
+import { isDarkAtom } from './atoms';
 
 interface ICoin {
   id: string,
@@ -31,7 +33,7 @@ const CoinsList = styled.ul``;
 
 const Coin = styled.li`
   background-color: white;
-  color: ${(props) => props.theme.bgColor};
+  color: black;
   margin-bottom: 10px;
   border-radius: 15px;
   a {
@@ -63,18 +65,8 @@ const CoinImg = styled.img`
 `
 
 const Coins = () => {
-  /* const [coins, setCoins] = useState<CoinInterface[]>([]);
-  const [loading, setLoading] = useState(true);
+  const setIsDarkFn = useSetRecoilState(isDarkAtom);
 
-  useEffect(() => {
-    (async() => {
-      const res = await fetch("https://api.coinpaprika.com/v1/coins");
-      const json = await res.json();
-      setCoins(json.slice(0, 99));
-      setLoading(false);
-    }) ();
-  }, []) */
-  
   //react-query로 수정
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins)
 
@@ -87,22 +79,23 @@ const Coins = () => {
         <Title>
           코인
         </Title>
+        <button onClick={() => setIsDarkFn((prev) => !prev)}>Dark toogle</button>
       </Header>
-      {isLoading ? <Loader>로딩즁...</Loader> : 
+      {isLoading ? <Loader>로딩즁...</Loader> :
         <CoinsList>
-        {data?.slice(0,100).map((coin) => (
-          <Coin key={coin.id}>
-            <Link 
-              to = {`${coin.id}`} 
-              state = {{ name: coin.name }}
-            >
-              <CoinImg alt={coin.name} src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}/>
-              {coin.name} &rarr;
-            </Link>
-          </Coin>
-        ))}
-      </CoinsList>}
-      
+          {data?.slice(0, 100).map((coin) => (
+            <Coin key={coin.id}>
+              <Link
+                to={`${coin.id}`}
+                state={{ name: coin.name }}
+              >
+                <CoinImg alt={coin.name} src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`} />
+                {coin.name} &rarr;
+              </Link>
+            </Coin>
+          ))}
+        </CoinsList>}
+
     </Container>
   )
 }
